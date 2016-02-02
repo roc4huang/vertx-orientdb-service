@@ -5,7 +5,7 @@ import io.vertx.core.json.JsonObject;
 public class ConnectionParams
 {
 
-	private String connectionPath;
+	private String uri;
 	private String username;
 	private String password;
 
@@ -15,14 +15,14 @@ public class ConnectionParams
 
 	public ConnectionParams(ConnectionParams params)
 	{
-		this.connectionPath = params.getConnectionPath();
+		this.uri = params.getUri();
 		this.username = params.getUsername();
 		this.password = params.getPassword();
 	}
 
 	public ConnectionParams(JsonObject json)
 	{
-		this.connectionPath = json.getString("connectionPath");
+		this.uri = json.getString("uri");
 		this.username = json.getString("username");
 		this.password = json.getString("password");
 	}
@@ -30,21 +30,21 @@ public class ConnectionParams
 	public JsonObject toJson()
 	{
 		JsonObject json = new JsonObject();
-		json.put("connectionPath", connectionPath);
+		json.put("connectionPath", uri);
 		json.put("username", username);
 		json.put("password", password);
 
 		return json;
 	}
 
-	public String getConnectionPath()
+	public String getUri()
 	{
-		return connectionPath;
+		return uri;
 	}
 
-	public void setConnectionPath(String connectionPath)
+	public void setUri(String uri)
 	{
-		this.connectionPath = connectionPath;
+		this.uri = uri;
 	}
 
 	public String getUsername()

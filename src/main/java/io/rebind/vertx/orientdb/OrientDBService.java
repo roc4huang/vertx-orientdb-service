@@ -1,7 +1,9 @@
 package io.rebind.vertx.orientdb;
 
-import io.rebind.vertx.orientdb.impl.DefaultOrientDBService;
+import io.rebind.vertx.orientdb.impl.OrientDBServiceImpl;
+import io.vertx.codegen.annotations.Fluent;
 import io.vertx.codegen.annotations.ProxyGen;
+import io.vertx.codegen.annotations.ProxyIgnore;
 import io.vertx.codegen.annotations.VertxGen;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
@@ -14,9 +16,9 @@ import io.vertx.serviceproxy.ProxyHelper;
 public interface OrientDBService
 {
 
-	static OrientDBService create(Vertx vertx, JsonObject config)
+	static OrientDBService create(Vertx vertx)
 	{
-		return new DefaultOrientDBService(vertx, config);
+		return new OrientDBServiceImpl(vertx);
 	}
 
 	static OrientDBService createProxy(Vertx vertx, String address)
@@ -24,8 +26,18 @@ public interface OrientDBService
 		return ProxyHelper.createProxy(OrientDBService.class, vertx, address);
 	}
 
-	void process(JsonObject document, Handler<AsyncResult<JsonObject>> resultHandler);
+	@Fluent
+	OrientDBService createVertex(JsonObject vertexDoc, Handler<AsyncResult<JsonObject>> handler);
 
+	@Fluent
+	OrientDBService createEdge(JsonObject edgeDoc, Handler<AsyncResult<JsonObject>> handler);
 
+	@Fluent
+	OrientDBService getVertex(JsonObject vertexQuery, Handler<AsyncResult<JsonObject>> handler);
 
+	@Fluent
+	OrientDBService getEdge(JsonObject edgeQuery, Handler<AsyncResult<JsonObject>> handler);
+
+	@ProxyIgnore
+	void close();
 }

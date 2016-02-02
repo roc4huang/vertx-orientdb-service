@@ -1,30 +1,24 @@
 package io.rebind.vertx.orientdb;
 
-import com.tinkerpop.blueprints.impls.orient.OrientBaseGraph;
-import io.rebind.vertx.orientdb.data.ConnectionParams;
-import io.rebind.vertx.orientdb.impl.DefaultOrientDB;
+import io.rebind.vertx.orientdb.impl.OrientDBImpl;
 import io.vertx.core.Vertx;
+import io.vertx.core.json.JsonObject;
 
 import java.util.Optional;
-import java.util.ServiceLoader;
-import java.util.stream.StreamSupport;
 
 public interface OrientDB
 {
 
-	static OrientDB create(Vertx vertx, ConnectionParams params)
+	static OrientDB create(Vertx vertx)
 	{
-		ServiceLoader<OrientDB> serviceLoader = ServiceLoader.load(OrientDB.class);
-
-		Optional<OrientDB> first = StreamSupport.stream(serviceLoader.spliterator(), false)
-		                                        .findFirst();
-
-		return first.isPresent() ? first.get() : new DefaultOrientDB(vertx, params);
+		return new OrientDBImpl(vertx);
 	}
 
-	void open();
+	JsonObject createVertex(final String iClassName, final String iClusterName, Optional<JsonObject> properties);
 
-	OrientBaseGraph db();
+	JsonObject createEdge(final String sourceId, final String destinationId, final String label, Optional<JsonObject> properties);
+
+	JsonObject getVertex(Optional<JsonObject> criteria);
 
 	void close();
 }

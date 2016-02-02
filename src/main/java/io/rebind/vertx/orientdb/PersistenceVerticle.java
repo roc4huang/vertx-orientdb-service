@@ -12,8 +12,14 @@ public class PersistenceVerticle extends AbstractVerticle
 	public void start() throws Exception
 	{
 		super.start();
-		this.dbService = OrientDBService.create(vertx, config());
+		this.dbService = OrientDBService.create(vertx);
 
 		ProxyHelper.registerService(OrientDBService.class, vertx, dbService, "vertx.persistence.service");
+	}
+
+	@Override
+	public void stop() throws Exception
+	{
+		dbService.close();
 	}
 }
